@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mini Wander — a Code Boutique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--green:#324434;--yellow:#ffa61e;--greyGreen:#afbead;--dark:#141414;--header-h:64px;--ease:cubic-bezier(.87,0,.13,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--green);color:var(--yellow);overflow-x:hidden;line-height:1.4}
+a{color:inherit;text-decoration:none}
+
+body{cursor:none}
+#cursor-dot{position:fixed;top:0;left:0;width:10px;height:10px;background:var(--yellow);border-radius:50%;z-index:9999;pointer-events:none;mix-blend-mode:difference;transition:width .2s,height .2s}
+#cursor-ring{position:fixed;top:0;left:0;width:34px;height:34px;border:1.5px solid rgba(255,166,30,.45);border-radius:50%;z-index:9998;pointer-events:none;transition:width .25s,height .25s}
+#cursor-dot.hover{width:20px;height:20px;background:#ffe545}
+#cursor-ring.hover{width:50px;height:50px;border-color:#ffe545}
+@media(max-width:768px){#cursor-dot,#cursor-ring{display:none}body{cursor:auto}}
+
+#noise{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:.035;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:200px 200px}
+
+#curtain{position:fixed;inset:0;z-index:100;background:var(--yellow);transform:translateY(-100%);transition:transform .7s var(--ease);display:flex;align-items:center;justify-content:center;pointer-events:none}
+#curtain.show{transform:translateY(0);pointer-events:all}
+#curtain .wordmark{width:80px;color:var(--green);animation:curtainSpin .6s var(--ease)}
+@keyframes curtainSpin{from{transform:rotate(-90deg);opacity:0}to{transform:rotate(0);opacity:1}}
+
+#header{position:fixed;top:0;left:0;width:100%;height:var(--header-h);z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;color:var(--yellow);mix-blend-mode:difference;transition:background .35s}
+#header.scrolled{background:rgba(50,68,52,.9);backdrop-filter:blur(12px);mix-blend-mode:normal}
+#logo{width:108px;height:20px}
+#nav{display:flex;gap:2.2rem}
+#nav a{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600;position:relative;cursor:none}
+#nav a::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+#nav a:hover::after,#nav a.active::after{transform:scaleX(1)}
+#menu-btn{display:none;background:none;border:none;cursor:none;z-index:55}
+#menu-btn span{display:block;width:24px;height:2px;background:var(--yellow);margin:5px 0;transition:.3s}
+@media(max-width:768px){#nav{display:none}#menu-btn{display:block}#nav.open{display:flex;flex-direction:column;position:absolute;top:var(--header-h);left:0;width:100%;background:var(--green);padding:2rem;gap:1.5rem;z-index:49}}
+
+#hero{position:fixed;top:0;left:0;width:100%;height:100vh;height:100dvh;overflow:hidden;z-index:1}
+@keyframes heroBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
+#hero-bg{position:absolute;top:-15%;left:-15%;width:130%;height:130%;transform-style:preserve-3d;will-change:transform;animation:heroBreath 6s ease-in-out infinite}
+
+#hero-video-a,#hero-video-b{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#hero-video-a{opacity:0;z-index:0} /* hidden, drawn to canvas */
+#hero-video-b{opacity:0;z-index:0}
+
+#hero-fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+#hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(10,12,8,.6));pointer-events:none;z-index:3}
+#hero-hint{position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);z-index:10;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--yellow);opacity:.8;pointer-events:none;transition:opacity .8s ease}
+#hero-hint.gone{opacity:0}
+#hero-text{position:absolute;bottom:5rem;left:2.5rem;max-width:600px;z-index:10;pointer-events:none;transition:opacity .8s ease,transform .3s}
+#hero-text .eyebrow{font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;margin-bottom:1rem;opacity:.8;font-weight:600}
+#hero-text h1{font-family:"Playfair Display",serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:700;line-height:1.12}
+#hero-text h1 em{font-style:italic;font-weight:400}
+#hero-text p{font-size:.8rem;line-height:1.65;opacity:.75;margin-top:.8rem;max-width:400px;color:var(--greyGreen)}
+#hero-text.hidden{opacity:0;pointer-events:none}
+
+#hero-spacer{height:105vh}
+#main{position:relative;z-index:3;background:var(--green);padding:5rem 2.5rem 8rem}
+@media(max-width:768px){#main{padding:3rem 1.5rem 6rem}}
+.sec-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;color:var(--greyGreen);font-weight:600;margin-bottom:.5rem}
+.sec-title{font-family:"Playfair Display",serif;font-size:clamp(2.2rem,5vw,4.2rem);font-weight:700;line-height:1.1;margin-bottom:3rem}
+.sec-title em{font-style:italic;font-weight:400}
+#cases{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;margin-bottom:5rem}
+@media(max-width:768px){#cases{grid-template-columns:1fr}}
+.case{position:relative;overflow:hidden;border-radius:6px;aspect-ratio:4/3;background:var(--dark);cursor:none;transition:transform .4s var(--ease)}
+.case:hover{transform:translateY(-6px)}
+.case img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.case:hover img{transform:scale(1.04)}
+.case .info{position:absolute;bottom:0;left:0;width:100%;padding:2.5rem 1.8rem 1.8rem;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff}
+.case .client{font-size:.55rem;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:.25rem}
+.case .name{font-family:"Playfair Display",serif;font-size:1.2rem;font-weight:700;margin-bottom:.3rem}
+.case .desc{font-size:.72rem;opacity:.8;line-height:1.45}
+#clients{display:flex;flex-wrap:wrap;gap:1.5rem 3rem;align-items:center;justify-content:center;padding:4rem 0;margin-bottom:5rem;border-top:1px solid rgba(255,166,30,.15);border-bottom:1px solid rgba(255,166,30,.15)}
+#clients span{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--greyGreen);font-weight:600}
+#expertise{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5rem;margin-bottom:5rem}
+@media(max-width:768px){#expertise{grid-template-columns:1fr}}
+.exp-card{padding:2rem 0;border-top:1px solid rgba(255,166,30,.2);transition:border-color .3s}
+.exp-card:hover{border-top-color:var(--yellow)}
+.exp-num{font-size:.58rem;color:var(--greyGreen);letter-spacing:.1em;margin-bottom:.7rem}
+.exp-title{font-family:"Playfair Display",serif;font-size:1.3rem;font-weight:700;margin-bottom:.5rem}
+.exp-desc{font-size:.76rem;color:var(--greyGreen);line-height:1.6}
+#footer{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;padding:4rem 0 2rem;border-top:1px solid rgba(255,166,30,.15)}
+@media(max-width:768px){#footer{grid-template-columns:1fr}}
+#footer h4{font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--greyGreen);margin-bottom:1rem}
+#footer a,#footer p{font-size:.76rem;line-height:2;display:block;transition:opacity .2s}
+#footer a:hover{opacity:.55}
+#footer .bottom{grid-column:1/-1;text-align:center;padding-top:3rem;font-size:.62rem;color:var(--greyGreen);display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+#footer .bottom a{color:var(--greyGreen)}#footer .bottom a:hover{color:var(--yellow)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+.page{display:none}.page.show{display:block}
+.about-page{padding-top:2rem}
+.about-page h2{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:700;line-height:1.25;margin-bottom:2rem}
+.about-page p{font-size:.88rem;line-height:1.7;opacity:.82;max-width:580px;margin-bottom:1.5rem;color:var(--greyGreen)}
+</style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="noise"></div>
+
+<div id="curtain">
+  <svg class="wordmark" viewBox="0 0 108 20" fill="currentColor"><path d="M4.5 20c-2 0-4-1-4-4V4c0-3 2-4.5 4.5-4.5h7C15 0 17 1.5 17 4.5v4L12 14v2c0 3-2 4-4.5 4H4.5ZM13 4.5C13 3 12 2 10.5 2h-6C3 2 2.5 3 2.5 4.5v11C2.5 17 3 17.5 4.5 17.5h3c1 0 2-.5 2-2v-3l5-5V4.5ZM24 0h-2.5L28 20h2.5L24 0Zm14 0L31.5 20h2.5L40.5 0H38Zm16.5 20h2l-6.5-20h-2l6.5 20Zm16 0-6.5-20h-2l6 18.5V0h-2v20h2.5l2-6h5l2 6H94Zm-3.5-8h4l-2-6-2 6Zm14 8h2l-4-20h-2.5L96.5 20h2l1.5-8h5.5l1.5 8Z"/></svg>
+</div>
+
+<header id="header">
+  <a href="#" onclick="go('home');return false">
+    <svg id="logo" viewBox="0 0 108 20" fill="currentColor"><path d="M4.5 20c-2 0-4-1-4-4V4c0-3 2-4.5 4.5-4.5h7C15 0 17 1.5 17 4.5v4L12 14v2c0 3-2 4-4.5 4H4.5ZM13 4.5C13 3 12 2 10.5 2h-6C3 2 2.5 3 2.5 4.5v11C2.5 17 3 17.5 4.5 17.5h3c1 0 2-.5 2-2v-3l5-5V4.5ZM24 0h-2.5L28 20h2.5L24 0Zm14 0L31.5 20h2.5L40.5 0H38Zm16.5 20h2l-6.5-20h-2l6.5 20Zm16 0-6.5-20h-2l6 18.5V0h-2v20h2.5l2-6h5l2 6H94Zm-3.5-8h4l-2-6-2 6Zm14 8h2l-4-20h-2.5L96.5 20h2l1.5-8h5.5l1.5 8Z"/></svg>
+  </a>
+  <nav id="nav">
+    <a href="#" data-p="about" onclick="go('about');return false">About</a>
+    <a href="#" data-p="home" class="active" onclick="go('home');return false">Work</a>
+    <a href="#" data-p="home" onclick="go('home');return false">Updates</a>
+    <a href="#" data-p="home" onclick="go('home');return false">Contact</a>
+    <a href="#" data-p="home" onclick="go('home');return false">Expertise</a>
+  </nav>
+  <button id="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</header>
+
+<section id="hero">
+  <div id="hero-bg">
+    <video id="hero-video-a" src="video-1.mp4" muted playsinline preload="auto"></video>
+    <video id="hero-video-b" src="video-2.mp4" muted playsinline preload="auto"></video>
+    <canvas id="hero-fx"></canvas>
+  </div>
+  <div id="hero-hint">Click to continue</div>
+  <div id="hero-text">
+    <div class="eyebrow">Meet Mini Wander</div>
+    <h1>A <em>Code Boutique</em> that helps extraordinary brands prove what&rsquo;s possible through digital craft.</h1>
+    <p>Mini Wander — a Code Boutique from imagination. Founded to prove what&rsquo;s possible through care, courage, and relentless craft.</p>
+  </div>
+</section>
+<div id="hero-spacer"></div>
+
+<main id="main">
+  <div class="page show" id="page-home">
+    <div class="sec-label reveal">Our Work</div>
+    <div class="sec-title reveal">Case <em>Studies</em></div>
+    <div id="cases"></div>
+    <div id="clients" class="reveal"><span>Past &amp; Present Clients</span><span>Dior</span><span>Nike</span><span>Inter Milan</span><span>SKKY Partners</span><span>Eurovision</span><span>erthos&reg;</span></div>
+    <div class="sec-label reveal">Expertise</div>
+    <div class="sec-title reveal">What We <em>Do</em></div>
+    <div id="expertise"></div>
+  </div>
+  <div class="page" id="page-about">
+    <div class="about-page">
+      <div class="sec-label reveal">About</div>
+      <h2 class="reveal">Mini Wander — a Code Boutique from imagination. Founded to prove what&rsquo;s possible.</h2>
+      <p class="reveal d1">We exist to redefine what &ldquo;good&rdquo; means by raising the bar through the work itself. We work with extraordinary brands and creative teams who refuse to settle.</p>
+      <p class="reveal d2">At our core is deep, multidisciplinary craft. We bring motion-first design and code together as one practice, shaped by specialists who care deeply about every decision.</p>
+      <p class="reveal d3">Mini Wander helps you maximize your digital potential, transforming design, technology, and motion into expressive, reliable, and future-ready experiences.</p>
+    </div>
+  </div>
+  <footer id="footer" class="reveal">
+    <div><h4>&bull; Talk</h4><a href="mailto:hi@miniwander.studio">hi@miniwander.studio</a></div>
+    <div><h4>&bull; Meet</h4><p>Imagination Street 1<br>Digital Realm</p></div>
+    <div><h4>&bull; Join</h4><a href="mailto:hiring@miniwander.studio">hiring@miniwander.studio</a></div>
+    <div class="bottom"><span>Since Twenty-Twenty-Four</span><a href="#">Twitter</a><a href="#">LinkedIn</a><a href="#">GitHub</a><a href="#">Instagram</a></div>
+  </footer>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const A=$('hero-video-a'),B=$('hero-video-b');
+const heroBg=$('hero-bg'),hint=$('hero-hint'),heroText=$('hero-text'),curtain=$('curtain');
+const dot=$('cursor-dot'),ring=$('cursor-ring'),header=$('header'),nav=$('nav');
+const fxCanvas=$('hero-fx'),fxCtx=fxCanvas.getContext('2d');
+
+let unlocked=false;
+let curtainDone=false;
+let watchEndFn=null;
+
+// ===== NATIVE VIDEO LOOP: timeupdate seek at d-0.5, no canvas =====
+// MP4 seeks fast enough that skipping 2 draw calls isn't needed.
+// Show native video A directly.
+A.style.opacity='1';A.style.zIndex='1';
+A.play().catch(()=>{});
+
+function loopVideoA(){
+  if(unlocked)return;
+  const d=A.duration;
+  if(d&&A.currentTime>=d-0.5){
+    A.currentTime=0.02;
+  }
+}
+A.addEventListener('timeupdate',loopVideoA);
+
+// ===== FX CANVAS =====
+function resizeFx(){
+  const dpr=devicePixelRatio||1;
+  const w=Math.round(innerWidth*1.3),h=Math.round(innerHeight*1.3);
+  fxCanvas.width=w*dpr;fxCanvas.height=h*dpr;
+  fxCanvas.style.width=w+'px';fxCanvas.style.height=h+'px';
+  fxCtx.setTransform(dpr,0,0,dpr,0,0);
+}
+resizeFx();addEventListener('resize',resizeFx);
+
+// ===== CLICK: load video-2.mov, switch =====
+function doSwitch(){
+  if(unlocked)return;
+  unlocked=true;
+  hint.style.opacity='0';
+  heroText.style.opacity='0'; heroText.style.pointerEvents='none';
+  console.log('🔓 Switching to video 2');
+
+  // Stop loop, hide A
+  A.removeEventListener('timeupdate',loopVideoA);
+  A.pause();
+  A.style.opacity='0';A.style.zIndex='0';
+
+  // Show & play B
+  B.style.opacity='1';B.style.zIndex='1';
+  B.currentTime=0;B.play().catch(()=>{});
+
+  function watchEnd(){
+    const d=B.duration;
+    if(!d||!isFinite(d))return;
+    if(B.currentTime>=d-0.3){
+      B.removeEventListener('timeupdate',watchEnd);
+      triggerCurtain();
+    }
+  }
+  B.addEventListener('timeupdate',watchEnd);
+  watchEndFn = watchEnd;
+}
+document.addEventListener('click',doSwitch);
+document.addEventListener('touchstart',doSwitch,{once:true});
+
+// ===== CURTAIN → ABOUT =====
+function triggerCurtain(){
+  if(curtainDone)return;curtainDone=true;
+  console.log('🟡 Curtain → About');
+  heroText.style.opacity='0'; heroText.style.pointerEvents='none';
+  hint.style.opacity='0';
+  curtain.classList.add('show');
+  setTimeout(()=>{
+    document.querySelectorAll('#nav a').forEach(a=>a.classList.remove('active'));
+    const al=document.querySelector('#nav a[data-p="about"]');if(al)al.classList.add('active');
+    document.querySelectorAll('.page').forEach(el=>el.classList.remove('show'));
+    const ap=$('page-about');if(ap)ap.classList.add('show');
+    scrollTo({top:innerHeight+100,behavior:'instant'});
+    revealCheck();
+    setTimeout(()=>{
+      curtain.style.transform='translateY(100%)';
+      setTimeout(()=>{curtain.classList.remove('show');curtain.style.transform='translateY(-100%)';},700);
+    },800);
+  },500);
+}
+
+// ===== PARTICLES =====
+const PARTICLES=55;let particles=[];
+function spawnParticle(){
+  const cw=Math.round(innerWidth*1.3),ch=Math.round(innerHeight*1.3);
+  return{x:Math.random()*cw,y:Math.random()*ch,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.25-.15,r:Math.random()*2.5+.8,life:1,decay:.002+Math.random()*.004,hue:Math.random()<.4?40:30+Math.random()*15,sat:70+Math.random()*30,light:55+Math.random()*40};
+}
+for(let i=0;i<PARTICLES;i++)particles.push(spawnParticle());
+function drawParticles(){
+  const cw=Math.round(innerWidth*1.3),ch=Math.round(innerHeight*1.3);
+  fxCtx.clearRect(0,0,cw,ch);
+  const waterTop=ch*.7,breath=Math.sin(performance.now()/1000*1.2)*.5+.5;
+  const g=fxCtx.createLinearGradient(0,waterTop,0,ch);
+  g.addColorStop(0,'rgba(255,180,40,0)');
+  g.addColorStop(.15,`rgba(255,166,30,${.03+.02*breath})`);
+  g.addColorStop(.4,`rgba(255,140,20,${.06+.03*breath})`);
+  g.addColorStop(.7,`rgba(255,120,15,${.08+.04*breath})`);
+  g.addColorStop(1,`rgba(255,100,10,${.04+.02*breath})`);
+  fxCtx.fillStyle=g;fxCtx.fillRect(0,waterTop,cw,ch-waterTop);
+  for(let i=0;i<particles.length;i++){
+    const p=particles[i];p.x+=p.vx;p.y+=p.vy;p.life-=p.decay;
+    if(p.life<=0)particles[i]=spawnParticle();
+    const r=fxCtx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3);
+    r.addColorStop(0,`hsla(${p.hue},${p.sat}%,${p.light}%,${p.life*.9})`);
+    r.addColorStop(.4,`hsla(${p.hue},${p.sat}%,${p.light}%,${p.life*.35})`);
+    r.addColorStop(1,`hsla(${p.hue},${p.sat}%,${p.light}%,0)`);
+    fxCtx.fillStyle=r;fxCtx.beginPath();fxCtx.arc(p.x,p.y,p.r*3,0,Math.PI*2);fxCtx.fill();
+    fxCtx.fillStyle=`hsla(${p.hue},${p.sat}%,${p.light+15}%,${p.life*.85})`;
+    fxCtx.beginPath();fxCtx.arc(p.x,p.y,p.r,0,Math.PI*2);fxCtx.fill();
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ===== CURSOR =====
+let mx=innerWidth/2,my=innerHeight/2,dx=mx,dy=my,rx=mx,ry=my;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+function animCursor(){
+  dx+=(mx-dx)*.35;dy+=(my-dy)*.35;rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  dot.style.transform=`translate(${dx}px,${dy}px) translate(-50%,-50%)`;
+  ring.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+document.querySelectorAll('a,button,.case,#menu-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{dot.classList.add('hover');ring.classList.add('hover')});
+  el.addEventListener('mouseleave',()=>{dot.classList.remove('hover');ring.classList.remove('hover')});
+});
+
+// ===== 3D PARALLAX =====
+let rY=0,rX=0;
+function parallax3D(){
+  const cx=innerWidth/2,cy=innerHeight/2;
+  rY+=(((mx-cx)/cx)*3.5-rY)*.06;rX+=(((cy-my)/cy)*2-rX)*.06;
+  heroBg.style.transform=`rotateY(${rY}deg) rotateX(${rX}deg)`;
+  heroText.style.transform=`translate(${((mx-cx)/cx)*-18}px,${((my-cy)/cy)*-12}px)`;
+  requestAnimationFrame(parallax3D);
+}
+parallax3D();
+
+// ===== NAVIGATION =====
+let cur='home';
+window.go=function(p){
+  if(p===cur)return;cur=p;
+  document.querySelectorAll('#nav a').forEach(a=>a.classList.remove('active'));
+  const l=document.querySelector(`#nav a[data-p="${p}"]`);if(l)l.classList.add('active');
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('show'));
+  const tgt=$('page-'+p);if(tgt)tgt.classList.add('show');
+  scrollTo({top:innerHeight+100,behavior:'smooth'});
+  // If returning to home, restart video A loop
+  if(p==='home'){
+    unlocked=false;curtainDone=false;
+    hint.style.opacity='';
+    heroText.style.opacity=''; heroText.style.pointerEvents='';
+    B.style.opacity='0';B.style.zIndex='0';B.pause();
+    A.style.opacity='1';A.style.zIndex='1';
+    A.currentTime=0;A.play().catch(()=>{});
+    A.addEventListener('timeupdate',loopVideoA);
+  }
+  setTimeout(revealCheck,600);
+};
+function revealCheck(){
+  document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight*.85)el.classList.add('on');});
+}
+addEventListener('scroll',revealCheck,{passive:true});revealCheck();
+addEventListener('scroll',()=>{header.classList.toggle('scrolled',scrollY>50);if(!heroText.classList.contains('hidden')) heroText.style.opacity=Math.max(0,1-scrollY/500);},{passive:true});
+// ===== SCROLL UP → RESET TO VIDEO A LOOP =====
+addEventListener('scroll', ()=>{
+  if (scrollY < 150 && unlocked) {
+    unlocked = false;
+    curtainDone = false;
+    hint.style.opacity='';
+    heroText.style.opacity=''; heroText.style.pointerEvents='';
+    B.style.opacity = '0'; B.style.zIndex = '0';
+    B.pause();
+    if (watchEndFn) { B.removeEventListener('timeupdate', watchEndFn); watchEndFn = null; }
+    A.style.opacity = '1'; A.style.zIndex = '1';
+    A.currentTime = 0;
+    A.play().catch(()=>{});
+    A.addEventListener('timeupdate', loopVideoA);
+    // Switch page back to home
+    document.querySelectorAll('.page').forEach(el=>el.classList.remove('show'));
+    const homePg = $('page-home');
+    if(homePg) homePg.classList.add('show');
+    document.querySelectorAll('#nav a').forEach(a=>a.classList.remove('active'));
+    const homeLink = document.querySelector('#nav a[data-p="home"]');
+    if(homeLink) homeLink.classList.add('active');
+    cur = 'home';
+  }
+}, {passive: true});
+window.toggleMenu=()=>nav.classList.toggle('open');
+
+// ===== RENDER =====
+$('cases').innerHTML=[
+  {c:'The Pendragon Cycle',n:'Rise of the Merlin',d:'An immersive interactive experience'},
+  {c:'Dior',n:'Dior – Garden of Dreams',d:'An immersive world experience using webAR'},
+  {c:'erthos®',n:'erthos®',d:'An award-winning web experience'},
+  {c:'Inter Milan × Nike',n:'Inter Milan × Nike',d:'An animated one-pager for Inter Milan and Nike'},
+  {c:'SKKY Partners',n:'SKKY Partners',d:'An accessible, high-performance web experience'},
+  {c:'Eurovision Song Contest',n:'Eurovision Village',d:'A groundbreaking 3D virtual experience'},
+].map((x,i)=>`<div class="case reveal d${Math.min(i,3)}"><img src="hero-poster.jpg" alt="${x.n}" loading="lazy"><div class="info"><div class="client">Client: ${x.c}</div><div class="name">${x.n}</div><div class="desc">${x.d}</div></div></div>`).join('');
+
+$('expertise').innerHTML=[
+  {t:'Motion Design',d:'Motion-first thinking. Every interaction and animation is purposeful.'},
+  {t:'Creative Development',d:'Bridging design and engineering. Production code that respects creative vision.'},
+  {t:'Interactive Experiences',d:'Physical-digital. Projections, touch installations, spatial interactions.'},
+  {t:'Performance',d:'Fast, accessible, responsive. Obsess over Core Web Vitals and runtime.'},
+  {t:'Strategy & Consulting',d:'Digital strategy that drives business. Technical audits and creative direction.'},
+  {t:'3D & WebGL',d:'Immersive 3D on the web. Product configurators to narrative worlds.'},
+].map((x,i)=>`<div class="exp-card reveal d${Math.min(i,3)}"><div class="exp-num">0${i+1}</div><div class="exp-title">${x.t}</div><div class="exp-desc">${x.d}</div></div>`).join('');
+
+setTimeout(revealCheck,500);
+console.log('🌙 Mini Wander — Imagine. Code. Wander.');
+</script>
+</body>
+</html>

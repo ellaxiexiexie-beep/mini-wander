@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+      text { font-family: 'Noto Sans SC', 'Helvetica Neue', sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="#324434"/>
+
+  <!-- Title -->
+  <text x="40" y="50" fill="#ffa61e" font-size="28" font-weight="700">产业分析框架</text>
+  <text x="40" y="72" fill="#afbead" font-size="12">Industry Analysis Framework</text>
+  <line x1="40" y1="85" x2="760" y2="85" stroke="#ffa61e" stroke-width="1"/>
+
+  <!-- Section title -->
+  <text x="40" y="115" fill="#ffa61e" font-size="16" font-weight="700">三维企业分类框架</text>
+  <text x="40" y="132" fill="#afbead" font-size="10">行业属性 × 成长阶段 × 规范程度</text>
+
+  <!-- Matrix -->
+  <!-- Col headers -->
+  <rect x="135" y="145" width="90" height="32" fill="none" stroke="#afbead" stroke-width="1"/>
+  <text x="143" y="165" fill="#afbead" font-size="11">初创</text>
+  <rect x="225" y="145" width="90" height="32" fill="none" stroke="#afbead" stroke-width="1"/>
+  <text x="233" y="165" fill="#afbead" font-size="11">成长</text>
+  <rect x="315" y="145" width="90" height="32" fill="none" stroke="#afbead" stroke-width="1"/>
+  <text x="323" y="165" fill="#afbead" font-size="11">成熟</text>
+  <rect x="405" y="145" width="90" height="32" fill="none" stroke="#afbead" stroke-width="1"/>
+  <text x="413" y="165" fill="#afbead" font-size="11">拟上市</text>
+
+  <!-- Rows -->
+  <rect x="40" y="177" width="95" height="34" fill="none" stroke="#afbead" stroke-width="1"/>
+  <text x="48" y="198" fill="#afbead" font-size="11">数字经济</text>
+  <rect x="40" y="211" width="95" height="34" fill="none" stroke="#afbead" stroke-width="1"/>
+  <text x="48" y="232" fill="#afbead" font-size="11">智能制造</text>
+  <rect x="40" y="245" width="95" height="34" fill="none" stroke="#afbead" stroke-width="1"/>
+  <text x="48" y="266" fill="#afbead" font-size="11">新材料</text>
+  <rect x="40" y="279" width="95" height="34" fill="none" stroke="#afbead" stroke-width="1"/>
+  <text x="48" y="300" fill="#afbead" font-size="11">生物医药</text>
+
+  <!-- Matrix cells with规范程度 shading -->
+  <rect x="135" y="177" width="90" height="34" fill="#3d5040" stroke="#afbead" stroke-width="1"/>
+  <rect x="225" y="177" width="90" height="34" fill="#3d5040" stroke="#afbead" stroke-width="1"/>
+  <rect x="315" y="177" width="90" height="34" fill="#485d4b" stroke="#afbead" stroke-width="1"/>
+  <rect x="405" y="177" width="90" height="34" fill="#485d4b" stroke="#afbead" stroke-width="1"/>
+
+  <rect x="135" y="211" width="90" height="34" fill="#3d5040" stroke="#afbead" stroke-width="1"/>
+  <rect x="225" y="211" width="90" height="34" fill="#485d4b" stroke="#afbead" stroke-width="1"/>
+  <rect x="315" y="211" width="90" height="34" fill="#556b58" stroke="#afbead" stroke-width="1"/>
+  <rect x="405" y="211" width="90" height="34" fill="#556b58" stroke="#afbead" stroke-width="1"/>
+
+  <rect x="135" y="245" width="90" height="34" fill="#3d5040" stroke="#afbead" stroke-width="1"/>
+  <rect x="225" y="245" width="90" height="34" fill="#485d4b" stroke="#afbead" stroke-width="1"/>
+  <rect x="315" y="245" width="90" height="34" fill="#556b58" stroke="#afbead" stroke-width="1"/>
+  <rect x="405" y="245" width="90" height="34" fill="#627a65" stroke="#afbead" stroke-width="1"/>
+
+  <rect x="135" y="279" width="90" height="34" fill="#3d5040" stroke="#afbead" stroke-width="1"/>
+  <rect x="225" y="279" width="90" height="34" fill="#485d4b" stroke="#afbead" stroke-width="1"/>
+  <rect x="315" y="279" width="90" height="34" fill="#556b58" stroke="#afbead" stroke-width="1"/>
+  <rect x="405" y="279" width="90" height="34" fill="#627a65" stroke="#afbead" stroke-width="1"/>
+
+  <!-- Legend for 规范程度 -->
+  <text x="40" y="340" fill="#afbead" font-size="11">规范程度：</text>
+  <rect x="120" y="328" width="14" height="14" fill="#3d5040" stroke="#afbead" stroke-width="1"/>
+  <text x="140" y="340" fill="#afbead" font-size="11">未规范</text>
+  <rect x="200" y="328" width="14" height="14" fill="#485d4b" stroke="#afbead" stroke-width="1"/>
+  <text x="220" y="340" fill="#afbead" font-size="11">培育中</text>
+  <rect x="280" y="328" width="14" height="14" fill="#556b58" stroke="#afbead" stroke-width="1"/>
+  <text x="300" y="340" fill="#afbead" font-size="11">已规范</text>
+  <rect x="360" y="328" width="14" height="14" fill="#627a65" stroke="#afbead" stroke-width="1"/>
+  <text x="380" y="340" fill="#afbead" font-size="11">标杆</text>
+
+  <!-- ===== Right side: Industry Chain Map ===== -->
+  <text x="470" y="115" fill="#ffa61e" font-size="16" font-weight="700">产业链图谱</text>
+  <text x="470" y="132" fill="#afbead" font-size="10">Industry Chain Mapping</text>
+
+  <!-- Chain boxes -->
+  <rect x="470" y="155" width="140" height="36" fill="none" stroke="#ffa61e" stroke-width="2" rx="4"/>
+  <text x="480" y="177" fill="#afbead" font-size="12">原料供应</text>
+  <line x1="540" y1="191" x2="540" y2="203" stroke="#ffa61e" stroke-width="1.5"/>
+  <polygon points="536,199 540,207 544,199" fill="#ffa61e"/>
+
+  <rect x="470" y="207" width="140" height="36" fill="none" stroke="#ffa61e" stroke-width="2" rx="4"/>
+  <text x="480" y="229" fill="#afbead" font-size="12">铸造毛坯</text>
+  <line x1="540" y1="243" x2="540" y2="255" stroke="#ffa61e" stroke-width="1.5"/>
+  <polygon points="536,251 540,259 544,251" fill="#ffa61e"/>
+
+  <rect x="470" y="259" width="140" height="36" fill="none" stroke="#ffa61e" stroke-width="2" rx="4"/>
+  <text x="480" y="281" fill="#afbead" font-size="12">精密加工</text>
+  <line x1="540" y1="295" x2="540" y2="307" stroke="#ffa61e" stroke-width="1.5"/>
+  <polygon points="536,303 540,311 544,303" fill="#ffa61e"/>
+
+  <rect x="470" y="311" width="140" height="36" fill="none" stroke="#ffa61e" stroke-width="2" rx="4"/>
+  <text x="480" y="333" fill="#afbead" font-size="12">装备制造</text>
+  <line x1="540" y1="347" x2="540" y2="359" stroke="#ffa61e" stroke-width="1.5"/>
+  <polygon points="536,355 540,363 544,355" fill="#ffa61e"/>
+
+  <rect x="470" y="363" width="140" height="36" fill="none" stroke="#ffa61e" stroke-width="2" rx="4"/>
+  <text x="480" y="385" fill="#afbead" font-size="12">终端市场</text>
+
+  <!-- Upstream / Downstream labels -->
+  <text x="630" y="173" fill="#afbead" font-size="10">上游</text>
+  <text x="630" y="335" fill="#afbead" font-size="10">下游</text>
+  <line x1="620" y1="173" x2="650" y2="173" stroke="#afbead" stroke-width="0.5"/>
+  <line x1="620" y1="381" x2="650" y2="381" stroke="#afbead" stroke-width="0.5"/>
+
+  <!-- Divider between left and right -->
+  <line x1="445" y1="105" x2="445" y2="400" stroke="rgba(175,190,173,0.2)" stroke-width="1"/>
+
+  <!-- Bottom methodology note -->
+  <text x="40" y="530" fill="#afbead" font-size="11">方法论：基于产业调研的三维分析框架，实现企业精准分层与产业链补链方向识别</text>
+  <text x="40" y="548" fill="#afbead" font-size="10">Framework: 3-Dimensional classification × Industry chain mapping for targeted investment attraction</text>
+
+  <!-- Gold corner accent -->
+  <line x1="770" y1="20" x2="780" y2="20" stroke="#ffa61e" stroke-width="2"/>
+  <line x1="780" y1="20" x2="780" y2="30" stroke="#ffa61e" stroke-width="2"/>
+</svg>
