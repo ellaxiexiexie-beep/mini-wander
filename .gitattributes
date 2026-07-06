@@ -1,4 +1,1 @@
-video-1_h264.mp4 -filter -diff -merge text
-video-2_h264.mp4 -filter -diff -merge text
-*.mp4 filter=lfs diff=lfs merge=lfs -text
 *.mov filter=lfs diff=lfs merge=lfs -text
