@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Mini Wander — a Code Boutique</title>
+<title>Ella Xie｜招商项目调度系统原型与作品集</title>
+<meta name="description" content="Ella Xie 的作品集。精选案例：招商项目调度系统原型，把分散的招商线索收拢为可追踪的推进链路。">
+<meta property="og:title" content="Ella Xie｜招商项目调度系统原型">
+<meta property="og:description" content="基于真实业务流程制作的可交互验证原型。查看项目池、招商拓展、状态流转与风险提醒。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ellaxiexiexie-beep.github.io/mini-wander/">
+<meta property="og:image" content="https://ellaxiexiexie-beep.github.io/mini-wander/assets/video/investment-preview-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
@@ -50,14 +57,27 @@ body{cursor:none}
 
 #hero-fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
 #hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(10,12,8,.6));pointer-events:none;z-index:3}
-#hero-hint{position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);z-index:10;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--yellow);opacity:.8;pointer-events:none;transition:opacity .8s ease}
+#hero-hint{position:absolute;bottom:1.1rem;left:50%;transform:translateX(-50%);z-index:10;font-size:.58rem;text-transform:uppercase;letter-spacing:.15em;color:var(--yellow);opacity:.58;pointer-events:none;transition:opacity .8s ease}
 #hero-hint.gone{opacity:0}
-#hero-text{position:absolute;bottom:4rem;left:50%;transform:translateX(-50%);z-index:10;pointer-events:none;transition:opacity .8s ease,transform .3s;text-align:center}
-#hero-text .eyebrow{font-size:clamp(1.4rem,4vw,2.4rem);text-transform:none;letter-spacing:.04em;margin-bottom:0;opacity:.9;font-weight:400;font-family:"Playfair Display",serif;font-style:italic}
-#hero-text h1{font-family:"Playfair Display",serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:700;line-height:1.12}
+#hero-text{position:absolute;bottom:clamp(4.5rem,9vh,7rem);left:50%;transform:translateX(-50%);z-index:10;width:min(800px,calc(100% - 3rem));display:flex;flex-direction:column;align-items:center;pointer-events:none;transition:opacity .8s ease,transform .3s;text-align:center}
+#hero-text .hero-kicker{font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;margin-bottom:.9rem;color:var(--yellow);opacity:.75;font-weight:700}
+#hero-text h1{font-family:"Playfair Display",serif;font-size:clamp(2.4rem,6.5vw,5rem);font-weight:700;line-height:1.06;text-shadow:0 4px 28px rgba(0,0,0,.34)}
 #hero-text h1 em{font-style:italic;font-weight:400}
-#hero-text p{font-size:.8rem;line-height:1.65;opacity:.75;margin-top:.8rem;max-width:400px;color:var(--greyGreen)}
+#hero-text .hero-value{font-size:clamp(.74rem,1.4vw,.92rem);line-height:1.7;opacity:.86;margin-top:1rem;max-width:650px;color:#eef3ea}
+#hero-text .hero-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:1rem}
+#hero-text .hero-tags span{border:1px solid rgba(255,166,30,.32);border-radius:999px;padding:4px 10px;color:var(--yellow);font-size:.56rem;font-weight:700;letter-spacing:.04em;background:rgba(20,20,20,.24)}
+#hero-text .hero-cta{display:inline-flex;align-items:center;gap:10px;margin-top:1.2rem;padding:.72rem 1.25rem;border:1px solid var(--yellow);border-radius:999px;background:rgba(20,20,20,.34);color:var(--yellow);font-size:.64rem;font-weight:700;letter-spacing:.08em;pointer-events:auto;transition:background .3s,color .3s}
+#hero-text .hero-cta:hover{background:var(--yellow);color:var(--dark)}
 #hero-text.hidden{opacity:0;pointer-events:none}
+@media(max-width:768px){
+  #hero-text{bottom:3.4rem;width:calc(100% - 2rem)}
+  #hero-text .hero-kicker{margin-bottom:.65rem;font-size:.54rem}
+  #hero-text h1{font-size:clamp(2.15rem,11vw,3.15rem)}
+  #hero-text .hero-value{max-width:340px;margin-top:.7rem;font-size:.72rem;line-height:1.6}
+  #hero-text .hero-tags{gap:5px;margin-top:.7rem}
+  #hero-text .hero-tags span{font-size:.49rem;padding:3px 7px}
+  #hero-text .hero-cta{margin-top:.85rem;padding:.65rem 1rem;font-size:.58rem}
+}
 
 #hero-spacer{height:105vh}
 #main{position:relative;z-index:3;background:var(--green);padding:5rem 2.5rem 8rem}
@@ -69,12 +89,29 @@ body{cursor:none}
 @media(max-width:768px){#cases,#work-cases{grid-template-columns:1fr}}
 .case{position:relative;overflow:hidden;border-radius:6px;aspect-ratio:4/3;background:var(--dark);cursor:none;transition:transform .4s var(--ease)}
 .case:hover{transform:translateY(-6px)}
-.case img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
-.case:hover img{transform:scale(1.04)}
+.case img,.case video{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.case:hover img,.case:hover video{transform:scale(1.04)}
 .case .info{position:absolute;bottom:0;left:0;width:100%;padding:2.5rem 1.8rem 1.8rem;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff}
 .case .client{font-size:.55rem;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:.25rem}
 .case .name{font-family:"Playfair Display",serif;font-size:1.2rem;font-weight:700;margin-bottom:.3rem}
 .case .desc{font-size:.72rem;opacity:.8;line-height:1.45}
+.case.featured{grid-column:1/-1;aspect-ratio:16/9;border:1px solid rgba(255,166,30,.24);background:#0b1712;box-shadow:0 28px 70px rgba(0,0,0,.24)}
+.case.featured video{filter:saturate(.88) contrast(1.05)}
+.case.featured .info{display:flex;flex-direction:column;align-items:flex-start;padding:4.5rem clamp(1.2rem,4vw,2.8rem) clamp(1.4rem,3vw,2.3rem);background:linear-gradient(180deg,transparent 15%,rgba(5,15,11,.58) 55%,rgba(5,15,11,.94))}
+.case.featured .case-kicker{font-size:.55rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--yellow);margin-bottom:.75rem}
+.case.featured .client{font-size:.56rem;opacity:.7}
+.case.featured .name{max-width:680px;margin-bottom:.45rem;font-size:clamp(1.6rem,3.4vw,2.7rem);line-height:1.12}
+.case.featured .desc{max-width:680px;font-size:clamp(.68rem,1.2vw,.82rem);line-height:1.65;opacity:.9}
+.case.featured .case-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:.8rem}
+.case.featured .case-tags span{border:1px solid rgba(255,166,30,.32);border-radius:999px;padding:4px 9px;color:var(--yellow);font-size:.52rem;letter-spacing:.03em}
+.case.featured .case-cta{position:absolute;right:clamp(1.2rem,4vw,2.8rem);bottom:clamp(1.4rem,3vw,2.3rem);display:inline-flex;gap:8px;padding:.7rem 1rem;border:1px solid var(--yellow);border-radius:999px;color:var(--yellow);font-size:.58rem;font-weight:700;letter-spacing:.06em;background:rgba(11,23,18,.64)}
+.case.featured:hover .case-cta{background:var(--yellow);color:var(--dark)}
+@media(max-width:768px){
+  .case.featured{aspect-ratio:4/5}
+  .case.featured .info{padding:4rem 1.2rem 1.25rem}
+  .case.featured .name{font-size:1.65rem}
+  .case.featured .case-cta{position:static;margin-top:1rem;padding:.62rem .85rem;font-size:.54rem}
+}
 #clients{display:flex;flex-wrap:wrap;gap:1.5rem 3rem;align-items:center;justify-content:center;padding:4rem 0;margin-bottom:5rem;border-top:1px solid rgba(255,166,30,.15);border-bottom:1px solid rgba(255,166,30,.15)}
 #clients span{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--greyGreen);font-weight:600}
 #expertise,#work-expertise{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5rem;margin-bottom:5rem}
@@ -314,7 +351,16 @@ body{cursor:none}
   </div>
   <div id="hero-hint">Click to continue</div>
   <div id="hero-text">
-    <div class="eyebrow">mini wander</div>
+    <div class="hero-kicker">Selected work · Case 01</div>
+    <h1>招商项目<br><em>调度系统原型</em></h1>
+    <p class="hero-value">把散落在表格、聊天和线下沟通里的招商线索，收拢成一条可追踪、可交接的推进链路。</p>
+    <div class="hero-tags" aria-label="案例能力">
+      <span>项目池</span>
+      <span>招商拓展</span>
+      <span>状态流转</span>
+      <span>风险提醒</span>
+    </div>
+    <a class="hero-cta" href="https://ellaxiexiexie-beep.github.io/investment-platform/?from=portfolio" target="_blank" rel="noopener" onclick="event.stopPropagation()">查看完整案例 <span>↗</span></a>
   </div>
 </section>
 <div id="hero-spacer"></div>
@@ -417,8 +463,8 @@ body{cursor:none}
               <div class="card-back">
                 <span class="cb-year">2025 — 至今</span>
                 <div class="cb-title">浙股产发</div>
-                <div class="cb-summary">金融服务部管培生 · 自研 SaaS 系统</div>
-                <div class="cb-detail"><span class="cb-tag">AI-Native 全栈 · 商业产品</span><div class="cb-divider"></div><strong class="cb-stat">3 周 · 4500 行 · SaaS 上线</strong><ul><li><strong>SaaS 系统交付 · </strong>独立完成园区管理 SaaS 全栈开发：设计项目「线索获取→初次对接→实地考察→方案谈判→签约入驻→存续服务」6 阶段全生命周期，内置 120 天黄色预警 / 240 天风险回收业务规则引擎。5 轮迭代交付 3 套定制变体，成本约为传统外包的 30%</li><li><strong>平台合作 · </strong>主导与阿里资产平台合作，推动 20+ 项园区资产线上化展示与标准化录入</li><li><strong>产业分析 · </strong>为常山县股权市场试点设计三维企业分类框架（行业属性 × 成长阶段 × 规范程度），对 60+ 企业完成分层分类并构建产业链图谱，输出被政府采纳的《常山县股权市场试点工作报告》</li></ul></div>
+                <div class="cb-summary">金融服务部管培生 · 业务数字化原型</div>
+                <div class="cb-detail"><span class="cb-tag">业务理解 × 产品设计 × 前端实现</span><div class="cb-divider"></div><strong class="cb-stat">3 周 · 可交互验证原型</strong><ul><li><strong>业务数字化原型 · </strong>独立完成招商项目调度系统可交互验证原型，把项目「录入→审核→认领→推进→完结」五步流程转化为项目池、招商拓展池、状态流转与风险提醒等可操作界面；当前用于业务验证和作品展示，不声称生产级 SaaS 上线</li><li><strong>平台合作 · </strong>参与园区资产线上化展示与标准化录入，推动资产资料形成可复用的信息结构</li><li><strong>产业分析 · </strong>为常山县股权市场试点设计三维企业分类框架（行业属性 × 成长阶段 × 规范程度），对 60+ 企业完成分层分类并构建产业链图谱，输出《常山县股权市场试点工作报告》</li></ul></div>
                 <span class="cb-hint">点击空白处翻回</span>
               </div>
             </div>
@@ -687,7 +733,7 @@ addEventListener('scroll',()=>{
 window.toggleMenu=()=>nav.classList.toggle('open');
 
 // ===== RENDER =====
-$('cases').innerHTML=$('work-cases').innerHTML=[
+const caseData=[
   {c:'个人项目',n:'个人作品集网站',d:'墨绿×金色视觉系统 · HERO 粒子动画 · 波波卡翻转 · 无框架纯手工',img:'hero-poster.jpg',
    lightbox:{
      client:'个人项目 · 独立开发',
@@ -705,7 +751,7 @@ $('cases').innerHTML=$('work-cases').innerHTML=[
        {label:'技术栈',text:'HTML/CSS/JS · ChatGPT/Codex 辅助全流程开发 · 响应式适配'}
      ]
    }},
-  {c:'浙股集团',n:'园区招商管理 SaaS',d:'从零搭建轻量级招商管理系统，项目池+拓展池双模块，状态自动流转，风险智能预警',img:'screenshot-zhaoshang.png',link:'https://ellaxiexiexie-beep.github.io/investment-platform/'},
+  {c:'浙股集团 · 业务数字化',n:'招商项目调度系统原型',d:'把分散的项目线索收拢为可追踪的推进链路：项目池集中查看、认领后持续推进、项目与园区载体分开管理，并按时长提示风险。',img:'assets/video/investment-preview-poster.jpg',video:'assets/video/investment-preview-10s.mp4',featured:true,tags:['项目池','招商拓展','状态流转','风险提醒'],link:'https://ellaxiexiexie-beep.github.io/investment-platform/?from=portfolio'},
   {c:'个人项目',n:'周报小工具',d:'为一线员工设计的手机周报工具：模板引导、语音输入、一键生成、无需登录，扫码即用。适合不会用 AI 的基层员工快速交周报。',img:'weekly-report-screenshot.png',link:'https://ellaxiexiexie-beep.github.io/weekly-report/'},
   {c:'浙股集团',n:'园区产业分析与产业链图谱',d:'常山/上虞园区产业研究，60+企业分层分类，补链方向识别',img:'industry-chain-map-v2.png',
    lightbox:{
@@ -763,11 +809,19 @@ $('cases').innerHTML=$('work-cases').innerHTML=[
         ]}
      ]
    }}
-].map((x,i)=>{
-  const inner=`<img src="${x.img}" alt="${x.n}" loading="lazy"><div class="info"><div class="client">${x.c}</div><div class="name">${x.n}</div><div class="desc">${x.d}</div></div>`;
-  if(x.link) return `<a href="${x.link}" target="_blank" class="case reveal d${Math.min(i,3)}">${inner}</a>`;
-  if(x.lightbox) return `<div onclick="openLightbox(${i})" class="case reveal d${Math.min(i,3)}" style="cursor:pointer">${inner}</div>`;
-  return `<div class="case reveal d${Math.min(i,3)}">${inner}</div>`;
+];
+const orderedCases=caseData.map((x,i)=>({x,i})).sort((a,b)=>Number(Boolean(b.x.featured))-Number(Boolean(a.x.featured)));
+$('cases').innerHTML=$('work-cases').innerHTML=orderedCases.map(({x,i})=>{
+  const media=x.video
+    ? `<video muted autoplay loop playsinline preload="metadata" poster="${x.img}" aria-label="${x.n} 10 秒预览"><source src="${x.video}" type="video/mp4"></video>`
+    : `<img src="${x.img}" alt="${x.n}" loading="lazy">`;
+  const tags=x.tags?`<div class="case-tags">${x.tags.map(t=>`<span>${t}</span>`).join('')}</div>`:'';
+  const cta=x.featured?`<span class="case-cta">查看完整案例 <span>↗</span></span>`:'';
+  const inner=`${media}<div class="info">${x.featured?'<div class="case-kicker">Selected work · 01</div>':''}<div class="client">${x.c}</div><div class="name">${x.n}</div><div class="desc">${x.d}</div>${tags}${cta}</div>`;
+  const cardClass=`case${x.featured?' featured':''} reveal d${Math.min(i,3)}`;
+  if(x.link) return `<a href="${x.link}" target="_blank" rel="noopener" class="${cardClass}">${inner}</a>`;
+  if(x.lightbox) return `<div onclick="openLightbox(${i})" class="${cardClass}" style="cursor:pointer">${inner}</div>`;
+  return `<div class="${cardClass}">${inner}</div>`;
 }).join('');
 
 $('expertise').innerHTML=$('work-expertise').innerHTML=[
